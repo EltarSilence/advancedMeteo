@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Wx Indexes</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="teq">
+      <table>
+        <tr><td>Temperatura</td><td><input id="temp" value="23.9"></td></tr>
+        <tr><td>Dewpoint</td><td><input id="dewp" value="2"></td></tr>
+        <tr><td>Pressione</td><td><input id="press" value="995.1"></td></tr>
+        <tr class="res">
+          <td colspan="2">
+            <input type="button" value="Calcola TEQ" onclick="clcTEQ()">
+          </td>
+        </tr>
+        <tr>
+          <td>Temperatura Equivalente Potenziale (K)</td><td id="resultK"></td>
+        </tr>
+        <tr>
+          <td>Temperatura Equivalente Potenziale (C)</td><td id="resultC"></td>
+        </tr>
+      </table>
+    </div>
+    
+  </body>
+  <script src="script.js" charset="utf-8"></script>
+</html>

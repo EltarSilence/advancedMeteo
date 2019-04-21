@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+	background-color: #2c3e50;
+	font-family: 'Lato', sans-serif;
+}
+
+table {
+	/*font-weight: bold;*/
+	color: white;
+	text-shadow: black;
+	text-align: center;
+	border: 2px solid white;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+td, tr {
+	border: 1px solid white;
+	border-radius: 2px;
+}
+
+input {
+	background-color: #ecf0f1;
+	border: 1px solid #2c3e50;
+	padding: 2px;
+}
+
+input[type=button] {
+	background-color: #EE5A24;
+	font-family: 'Lato', sans-serif;
+	font-weight: bold;
+	padding: 4px;
+	width: 100%;
+}
+
+#resultK, #resultC {
+	padding: 8px;
+}
