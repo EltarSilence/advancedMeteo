@@ -1,3 +1,19 @@
+//triggers
+
+$('.mappat850').toggle();
+$('.mappavv850').toggle();
+
+$('.mp_whiting').toggle();
+
+$('.show').on('click', function(){
+	var id = $(this).attr('id');
+	$('.mappa' + id).toggle();
+});
+
+$('.show_whiting').on('click', function(){
+	$('.mp_whiting').toggle();
+});
+
 function clcTEQ() {
 	var tmp = $("#temp").val();
 	var dwp = $("#dewp").val();
@@ -23,13 +39,17 @@ function clcHnC() {
 }
 
 function clcFogSI() {
-	var ts = $("#temp2").val();
-	var t850 = $("#t850").val();
-	var tds = $("#tds").val();
-	var vv850 = $("#vv850").val();
+	$('#fsi').removeClass(function() {
+  		return $('#fsi').attr('color');
+  	});
+	var ts = $('#temp2').val();
+	var t850 = $('#t850_in').val();
+	var tds = $('#tds').val();
+	var vv850 = $('#vv850_in').val();
 
 	var color, rischio;
 	var fsi = 4*Number(ts) - 2* (Number(t850) + Number(tds)) + Number(vv850);
+
 	if (fsi < 31){
 		color = 'red';
 		rischio = 'Elevato';
@@ -44,4 +64,42 @@ function clcFogSI() {
 	}
 	$('#fsi').html(fsi + '<br> (rischio '+rischio+')');
 	$('#fsi').addClass(color);
+}
+
+function clcWhiting() {
+	$('#whiting').removeClass(function() {
+  		return $('#whiting').attr('color');
+  	});
+	var t850 = $('#t850_w').val();
+	var t500 = $('#t500_w').val();
+	var d850 = $('#d850_w').val();
+	var t700 = $('#t700_w').val();
+	var d700 = $('#d700_w').val();
+
+	var whiting = (Number(t850) - Number(t500)) + Number(d850) - (Number(t700) - Number(d700));
+
+	var color, rischio, instab;
+	if (whiting < 15){
+		color = 'green';
+		rischio = 'basso';
+		instab = 'stabile';
+	}
+	if (whiting >= 15 && whiting < 20){
+		color = 'yellow';
+		rischio = 'moderato';
+		instab = 'leggermente instabile';
+	}
+	if (whiting >= 20 && whiting < 30){
+		color = 'red';
+		rischio = 'elevato';
+		instab = 'instabile';
+	}
+	if (whiting >= 30){
+		color = 'purple';
+		rischio = 'altissimo';
+		instab = 'potentemente instabile';
+	}
+
+	$('#whiting').html('Tra ' + (whiting-5)+' e '+ (whiting+5)+' ('+whiting+') '+'<br>'+'Rischio: '+rischio+', aria '+instab);
+	$('#whiting').addClass(color);
 }

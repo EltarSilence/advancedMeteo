@@ -10,12 +10,12 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-4">
           <table class="table table-dark">
             <tr>
-              <td colspan="2">Temperatura Equivalente Potenziale</td>
+              <td class="title" colspan="2">Temperatura Equivalente Potenziale</td>
             </tr>
             <tr>
               <td>Temperatura</td>
@@ -45,7 +45,7 @@
         <div class="col-md-4">
           <table class="table table-dark">
             <tr>
-              <td colspan="2">Stima formazione cumuli</td>
+              <td colspan="2" class="title">Stima formazione cumuli</td>
             </tr>
             <tr>
               <td>Temperatura</td>
@@ -68,23 +68,33 @@
         <div class="col-md-4">
           <table class="table table-dark">
             <tr>
-              <td colspan="2">Fog Stability Index</td>
+              <td class="title" colspan="2">Fog Stability Index</td>
             </tr>
             <tr>
               <td>Temperatura</td>
               <td><input id="temp2"></td>
             </tr>
             <tr>
-              <td>Temperatura 850hPa</td>
-              <td><input id="t850"></td>
+              <td>Temperatura 850hPa <span class="show" id="t850">(vedi)</span></td>
+              <td><input id="t850_in"></td>
+            </tr>
+            <tr>
+              <td class="mappat850" colspan="2">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.678&lon=10.651&zoom=10&level=850h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.742&detailLon=10.701&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
             </tr>
             <tr>
               <td>Dewpoint</td>
               <td><input id="tds"></td>
             </tr>
             <tr>
-              <td>V. Vento 850hPa</td>
-              <td><input id="vv850"></td>
+              <td>V. Vento 850hPa <span class="show" id="vv850">(vedi)</span></td>
+              <td><input id="vv850_in"></td>
+            </tr>
+            <tr>
+              <td class="mappavv850" colspan="2">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.683&lon=10.647&zoom=10&level=850h&overlay=wind&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.672&detailLon=10.578&metricWind=kt&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
+              </td>
             </tr>
             <tr class="res">
               <td colspan="2">
@@ -95,8 +105,72 @@
               <td>Fog Stability Index</td><td id="fsi"></td>
             </tr>
           </table>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <table class="table table-dark">
+            <tr>
+              <td class="title" colspan="2">Indice di Whiting <span class="show_whiting">(Mostra mappe)</span></td>
+            </tr>
+            <tr>
+              <td>Temperatura a 850hPa</td>
+              <td><input id="t850_w"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="mp_whiting">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.675&lon=10.646&zoom=11&level=850h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.656&detailLon=10.615&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>Dewpoint a 850hPa</td>
+              <td><input id="d850_w"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="mp_whiting">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.675&lon=10.646&zoom=11&level=850h&overlay=dewpoint&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.656&detailLon=10.615&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>Temperatura a 500hPa</td>
+              <td><input id="t500_w"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="mp_whiting">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.675&lon=10.646&zoom=11&level=500h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.656&detailLon=10.615&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>Temperatura a 700hPa</td>
+              <td><input id="t700_w"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="mp_whiting">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.679&lon=10.650&zoom=11&level=700h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.656&detailLon=10.615&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>Dewpoint a 700hPa</td>
+              <td><input id="d700_w"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="mp_whiting">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.675&lon=10.646&zoom=11&level=700h&overlay=dewpoint&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.656&detailLon=10.615&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr class="res">
+              <td colspan="2">
+                <input type="button" value="Calcola indice di Whiting" onclick="clcWhiting()">
+              </td>
+            </tr>
+            <tr>
+              <td>Indice di Whiting</td><td id="whiting"></td>
+            </tr>
+            <tr>
+              <td colspan="2"><img width="100%" src="http://www.villasmunta.it/Tabelle/tavola1.jpg"></td>
+            </tr>
+          </table>
         </div>
-        
       </div>
     </div>
   </body>
