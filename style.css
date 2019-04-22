@@ -72,3 +72,8 @@ span {
 .green {
 	background-color: #27ae60;
 }
+
+.indexes {
+	border-radius: 10px;
+	cursor: none;
+}

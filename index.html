@@ -166,11 +166,85 @@
             <tr>
               <td>Indice di Whiting</td><td id="whiting"></td>
             </tr>
-            <tr>
-              <td colspan="2"><img width="100%" src="http://www.villasmunta.it/Tabelle/tavola1.jpg"></td>
-            </tr>
           </table>
         </div>
+         <div class="col-md-3">
+          <table class="table table-dark">
+            <tr>
+              <td colspan="2">
+                <img class="indexes" width="100%" src="http://www.villasmunta.it/Tabelle/tavola1.jpg">
+              </td>
+            </tr>
+          </table>
+         </div>
+         <div class="col-md-5">
+          <table class="table table-dark">
+            <tr>
+              <td class="title" colspan="3">Indice KO <span class="show_ko">(Mostra mappe)</span></td>
+            </tr>
+            <tr>
+              <td>Pressione: <input id="prsKO" </td>
+              <td>Temperatura: <input id="tempKOs"></td>
+              <td>Punto di rugiada: <input id="dewpKOs"></td>
+            </tr>
+            <tr class="map_KO">
+              <td class="mappaKO1000temp" colspan="2">
+                
+              </td>
+              <td class="mappaKO1000dewp" colspan="1">
+                
+              </td>
+            </tr>
+            <tr>
+              <td>850 hPa </td>
+              <td>Temperatura: <input id="tempKO850"></td>
+              <td>Punto di rugiada: <input id="dewpKO850"></td>
+            </tr>
+            <tr class="map_KO">
+              <td class="mappaKO850temp" colspan="2">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=900h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+              <td class="mappaKO850dewp" colspan="1">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=850h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>700 hPa </td>
+              <td>Temperatura: <input id="tempKO700"></td>
+              <td>Punto di rugiada: <input id="dewpKO700"></td>
+            </tr>
+            <tr class="map_KO">
+              <td class="mappaKO700temp" colspan="2">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=850h&overlay=dewpoint&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+                
+              </td>
+              <td class="mappaKO700dewp" colspan="1">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=700h&overlay=dewpoint&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr>
+              <td>500 hPa </td>
+              <td>Temperatura: <input id="tempKO500"></td>
+              <td>Punto di rugiada: <input id="dewpKO500"></td>
+            </tr>
+            <tr class="map_KO">
+              <td class="mappaKO500temp" colspan="2">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=700h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+              <td class="mappaKO500dewp" colspan="1">
+                <iframe src="https://embed.windy.com/embed2.html?lat=45.688&lon=10.655&zoom=10&level=500h&overlay=temp&menu=&message=true&marker=true&calendar=&pressure=true&type=map&location=coordinates&detail=&detailLat=45.664&detailLon=10.617&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+              </td>
+            </tr>
+            <tr class="res">
+              <td colspan="3">
+                <input type="button" value="Calcola KO" onclick="clcKO()">
+              </td>
+            </tr>
+            <tr>
+              <td>Indice KO</td><td colspan="2" id="ko"></td>
+            </tr>
+          </table>
+         </div>
       </div>
     </div>
   </body>
