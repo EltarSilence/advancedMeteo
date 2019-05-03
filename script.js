@@ -1,4 +1,15 @@
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var tmrw = dd+1;
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+today = mm + '/' + dd + '/' + yyyy;
+var url_sounding = "http://weather.uwyo.edu/cgi-bin/sounding?region=europe&TYPE=GIF%3ASKEWT&YEAR="+yyyy+"&MONTH="+mm+"&FROM="+dd+"12&TO="+tmrw+"12&STNM=16080"
+//sounding?region=europe&TYPE=GIF%3ASKEWT&YEAR=2019&MONTH=05&FROM=0312&TO=0412&STNM=16080
+
 //triggers
+
+$('#snd').attr('src', url_sounding);
 
 $('.mappat850').toggle();
 $('.mappavv850').toggle();
@@ -18,6 +29,57 @@ $('.show_whiting').on('click', function(){
 $('.show_ko').on('click', function(){
 	$('.map_KO').toggle();
 });
+
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function toDegrees (angle) {
+  return angle * (180 / Math.PI);
+}
+
+function clcSWEAT(){
+	//SWEAT = 12Td850 + 20(T - 49) + 2*f850 + f500 + 125 (S + 0.2)
+	//T = somma t850+td850 - 2*t500 Se T<49, allora 20(T-49) = 0
+
+	/*
+	Per quanto concerne il termine relativo allo shear del vento 125 (S + 0.2), bisogna far riferimento alla seguente tabella:
+	- direzione del vento a 850 hPa compresa nell'intervallo 130° - 250°	
+	- direzione del vento a 500 hPa compresa nell'intervallo 210° - 310°	
+	- direzione del vento a 500 hPa meno direzione del vento a 850 hPa > 0 	
+	- sia f850 che f500 >= 15 nodi
+	
+	E' sufficiente rispondere NO ad una delle precedenti condizioni per porre il termine 125(S + 0.2) = 0
+
+	*/
+
+	var t850 = $("#t850_SWEAT").val();
+	var td850 = $("#td850_SWEAT").val();
+	var t500 = $("#t500_SWEAT").val();
+	var vv850 = $("#vv850_SWEAT").val();
+	var vv500 = $("#vv500_SWEAT").val();
+	var dir850 = $("#dv850_SWEAT").val();
+	var dir500 = $("#dv500_SWEAT").val();
+	
+	var shear, sweat, VNT;
+	td850 < 0 ? td850 = 0 : td850;
+	var T = Number(t850)+Number(td850) - 2*Number(t500);
+	var L = 20*(T - 49);
+	T < 49 ? L=0 : L;
+
+	if ((dir850 >= 130 && dir850 <= 250) && (dir500 >= 210 && dir500 <= 310) && ((dir500 - dir850) > 0) && (vv850 >= 15 && vv500 >= 15)){
+		dir850 = toRadians(dir850);
+		dir500 = toRadians(dir500);
+		shear = Math.sin(dir500 - dir850);
+		VNT = 125*(shear + 0.2);
+	}
+	else {
+		VNT = 0;
+	}
+	debugger;
+	sweat = 12*Number(td850) + Number(L) + 2*Number(vv850) + Number(vv500) + Number(VNT);
+	$('#SWEAT').html(sweat);
+}
 
 
 function TEQ(tmp, dwp, prs){
