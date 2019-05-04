@@ -1,10 +1,17 @@
 var today = new Date();
+var tmrwobj = new Date();
+tmrwobj.setDate(today.getDate()+1);
+
 var dd = String(today.getDate()).padStart(2, '0');
-var tmrw = dd+1;
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var tmrw = String(tmrwobj.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
-today = mm + '/' + dd + '/' + yyyy;
-var url_sounding = "http://weather.uwyo.edu/cgi-bin/sounding?region=europe&TYPE=GIF%3ASKEWT&YEAR="+yyyy+"&MONTH="+mm+"&FROM="+dd+"12&TO="+tmrw+"12&STNM=16080"
+var today_hr = '12';
+var tmrw_hr = '12';
+if (today.getHours() <= 14){
+	today_hr = '00'; tmrw_hr = '00';
+}
+var url_sounding = "http://weather.uwyo.edu/cgi-bin/sounding?region=europe&TYPE=GIF%3ASKEWT&YEAR="+yyyy+"&MONTH="+mm+"&FROM="+dd+today_hr+"&TO="+tmrw+tmrw_hr+"&STNM=16080";
 //sounding?region=europe&TYPE=GIF%3ASKEWT&YEAR=2019&MONTH=05&FROM=0312&TO=0412&STNM=16080
 
 //triggers
