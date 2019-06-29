@@ -45,6 +45,7 @@ $json_q = json_decode($txt, true);
 <head>
   <meta charset="utf-8">
   <title>Wx Indexes</title>
+  <meta http-equiv="refresh" content="60" > 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -112,7 +113,7 @@ $json_q = json_decode($txt, true);
             </tr>
             <tr>
               <td>Indice UV</td>
-              <td style="background-color: <?php echo getColorUV($uv)['color']; ?>;"><?php echo $uv ?><br>
+              <td style="background-color: <?php echo getColorUV($uv)['color']; ?>; color: black"><b><?php echo $uv ?></b><br>
                 <small><?php echo getColorUV($uv)['msg']; ?></small>
               </td>
             </tr>
