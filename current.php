@@ -45,7 +45,7 @@ $json_q = json_decode($txt, true);
 <head>
   <meta charset="utf-8">
   <title>Wx Indexes</title>
-  <meta http-equiv="refresh" content="60" > 
+  <meta http-equiv="refresh" content="60" >
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -119,8 +119,13 @@ $json_q = json_decode($txt, true);
             </tr>
             <tr>
               <td>Energia Solare attuale</td>
-              <td><?php echo round($wm2/1000, 1) ?> KWh/mq<br>(<?php echo floor(convertWm2toLux($wm2)); ?> lux @ 555 nm)</td>
+              <td><?php echo round($wm2/1000, 2) ?> KWh/mq<br>(<?php echo floor(convertWm2toLux($wm2)); ?> lux @ 555 nm)</td>
             </tr>
+          </table>
+        </div>
+
+        <div class="col-md-4">
+          <table class="table table-dark">
             <tr>
               <td class="title" colspan="2">Qualit&agrave; dell'atmosfera</td>
             </tr>
@@ -128,16 +133,22 @@ $json_q = json_decode($txt, true);
               <td>O<sub>3</sub> (Ozono)</td><td style="background-color: <?php echo getOzono($json_q['data'][0]['o3'])['color'] ?>;"><?php echo floor($json_q['data'][0]['o3']); ?> µg/m<sup>3</sup><br>
                 (<?php echo getOzono($json_q['data'][0]['o3'])['msg'] ?>)</td>
             </tr>
-              <tr>
-                <td>PM2.5<br><small>(pericolo >25µg/m<sup>3</sup>)</small></td> <td><?php echo floor($json_q['data'][0]['pm25']); ?> µg/m<sup>3</sup></td>
-              </tr>
-              <tr>
-                <td>PM10<br><small>(pericolo >50µg/m<sup>3</sup>)</small></td> <td><?php echo floor($json_q['data'][0]['pm10']); ?> µg/m<sup>3</sup></td>
-              </tr>
+            <tr>
+              <td>PM2.5<br><small>(pericolo >25µg/m<sup>3</sup>)</small></td> <td><?php echo floor($json_q['data'][0]['pm25']); ?> µg/m<sup>3</sup></td>
+            </tr>
+            <tr>
+              <td>PM10<br><small>(pericolo >50µg/m<sup>3</sup>)</small></td> <td><?php echo floor($json_q['data'][0]['pm10']); ?> µg/m<sup>3</sup></td>
+            </tr>
+            <tr>
+              <td>NO<sub>2</sub><br><small>(pericolo >35µg/m<sup>3</sup>)</small></td> <td><?php echo round($json_q['data'][0]['no2'],2); ?> µg/m<sup>3</sup></td>
+            </tr>
+            <tr>
+              <td>CO<br><small>(pericolo >10ppm)</small></td> <td><?php echo round(($json_q['data'][0]['co'])/1000); ?> ppm</td>
+            </tr>
             </table>
-          </div>
+        </div>
 
-          <div class="col-md-4">
+          <!--<div class="col-md-4">
             <table class="table table-dark">
               <tr>
                 <td class="title">
@@ -145,14 +156,14 @@ $json_q = json_decode($txt, true);
                   <img width="500px" height="500px" src="http://www.arpa.veneto.it/previsioni/radar_valeggio/PPI_36_Z_2_01.PNG">
                 </td>
               </tr>
-              <!--<tr>
+              <tr>
               <td class="title">
               Webcam Bogliaco<hr>
               <img width="500px" height="500px" src="http://www.marinadibogliaco.com/meteo/bogliaco.jpg?n=1678601804">
             </td>
-          </tr>-->
+          </tr>
         </table>
-      </div>
+      </div>-->
     </div>
 
     <div class="row">
