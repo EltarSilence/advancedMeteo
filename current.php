@@ -1,12 +1,21 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 require 'core.php';
 //CURRENT OBS
 $url = 'https://api.weather.com/v2/pws/observations/current?stationId=IGARGNAN4&format=json&units=m&apiKey=81f69e3da6b04689b69e3da6b096898b';
+$url_rain = 'https://api.weather.com/v2/pws/observations/current?stationId=ITOSCOLA8&format=json&units=m&apiKey=81f69e3da6b04689b69e3da6b096898b';
 $url1 = 'https://api.weatherbit.io/v2.0/forecast/hourly?city=Gargnano&country=IT&key=607265bbae2d428d902a71395af79635&hours=24';
 $url2 = 'https://api.weatherbit.io/v2.0/current/airquality?city=Gargnano&country=IT&key=607265bbae2d428d902a71395af79635';
 
 $RECORD_ON_DATABASE = true;
+
+//rain
+$txt = file_get_contents($url_rain);
+$json_rain = json_decode($txt, true);
+$mmh = $json_rain->observations[0]['metric']['precipRate'];
+if ($mmh == 0){
+  $mmh = 0; //bug
+}
 
 try {
   $json = file_get_contents($url);
@@ -48,18 +57,24 @@ try {
   }
   $dewpoint = $current->dewpt;
   if (is_null($dewpoint)) $dewpoint = 'N/D';
+
   $wspd = $current->windSpeed;
-  if (is_null($wspd)) $wspd = 'N/D';
   $gusts = $current->windGust;
-  if (is_null($gusts)) $gusts = 'N/D';
-  $beaufort = getBeaufort(avg($wspd, $gusts))['lvl'];
+  if (is_null($wspd) || is_null($gusts)) {
+    $wspd = 'N/D';
+    $gusts = 'N/D';
+    $beaufort = NULL;
+  }
+  else {
+    $beaufort = getBeaufort(avg($wspd, $gusts))['lvl'];
+  }
 
   $press = $current->pressure;
   if (is_null($press)) $press = 'N/D';
 
   $qnh = convertQFEToQNH($press);
 
-  $mmh = NULL;
+
 
   //upcoming
   $txt = file_get_contents($url1);
@@ -128,9 +143,8 @@ catch(Exception $e) {
               </td>
             </tr>
             <tr>
-              <td>Pressione di vapore</td>
-              <td>Satura: <?php echo getVapPressure($temp) ?> mbar<br>
-                Effettiva: <?php echo getVapPressure($dewpoint) ?> mbar</td>
+              <td>Intensit&agrave; precipitazioni</td>
+              <td><?php echo $mmh ?> mm/h</td>
               </tr>
           </table>
         </div>
@@ -324,17 +338,16 @@ if ($RECORD_ON_DATABASE){
   $username = "root";
   $password = "";
 
-  // Create connection
   $conn = new mysqli($servername, $username, $password, 'currentwx');
 
-  $data = [$obstime, $temp, $dewpoint, $hi, $humidity, $winddir, $wspd, $gusts, $beaufort, $press, $qnh, $uv, $wm2, $o3, $pm25, $pm10, $no2, $co, $mmh, $sw];
+  /*$data = [$obstime, $temp, $dewpoint, $hi, $humidity, $winddir, $wspd, $gusts, $beaufort, $press, $qnh, $uv, $wm2, $o3, $pm25, $pm10, $no2, $co, $mmh, $sw];
   foreach ($data as $datum){
     if ($datum=='' || is_null($datum)){
       $datum = NULL;
     }
-  }
+  }*/
 
-  $sql = "INSERT INTO weather (instant, temp, dewp, hi, rh, dirVen, minVen, maxVen, beauf, qfe, qnh, uv, whmq, o3, pm25, pm10, no2, co, mmh, sw) VALUES ('$obstime', $temp, $dewpoint, $hi, $humidity, $winddir, $wspd, $gusts, $beaufort, $press, $qnh, $uv, $wm2, $o3, $pm25, $pm10, $no2, $co, NULL, '$sw')";
+  $sql = "INSERT INTO weather (instant, temp, dewp, hi, rh, dirVen, minVen, maxVen, beauf, qfe, qnh, uv, whmq, o3, pm25, pm10, no2, co, mmh, sw) VALUES ('$obstime', $temp, $dewpoint, $hi, $humidity, $winddir, $wspd, $gusts, $beaufort, $press, $qnh, $uv, $wm2, $o3, $pm25, $pm10, $no2, $co, $mmh, '$sw')";
 
   $conn->query($sql);
 }
