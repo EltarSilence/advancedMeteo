@@ -10,83 +10,85 @@ $url2 = 'https://api.weatherbit.io/v2.0/current/airquality?city=Gargnano&country
 $RECORD_ON_DATABASE = true;
 
 //rain
-$txt = file_get_contents($url_rain);
-$json_rain = json_decode($txt, true);
+$txt1 = file_get_contents($url_rain);
+$json_rain = json_decode($txt1, true);
+
 $mmh = $json_rain->observations[0]['metric']['precipRate'];
 if ($mmh == 0){
   $mmh = 0; //bug
 }
+//var_dump($json_rain);
 
-try {
-  $json = file_get_contents($url);
-  $obj = json_decode($json);
+$json = file_get_contents($url);
+$obj = json_decode($json);
 
-  //api retrieval
-  $wx = $obj->observations[0];
-
-  $sw = $wx->softwareType;
-  $nome = $wx->neighborhood;
-  $obstime = $wx->obsTimeLocal;
-
-  $wm2 = $wx->solarRadiation;
-  if (is_null($wm2)) {
-    $wm2 = 'N/D';
-    $lux = 'N/D';
-  }
-  else {
-    $lux = floor(convertWm2toLux($wm2));
-  }
-  $uv = $wx->uv;
-  if (is_null($uv)) $uv = 'N/D';
-  $winddir = $wx->winddir;
-  if (is_null($winddir)) $winddir = 'N/D';
-  $humidity = $wx->humidity;
-  if (is_null($humidity)) $humidity = 'N/D';
-
-  $current = $wx->metric;
-
-  $temp = $current->temp;
-  if (is_null($temp)) $temp = 'N/D';
-  $hi = $current->heatIndex;
-  if (is_null($hi)){
-    $hi = 'N/D';
-    $calore = 'N/D';
-  }
-  else {
-    $calore = getHeatInfo($hi);
-  }
-  $dewpoint = $current->dewpt;
-  if (is_null($dewpoint)) $dewpoint = 'N/D';
-
-  $wspd = $current->windSpeed;
-  $gusts = $current->windGust;
-  if (is_null($wspd) || is_null($gusts)) {
-    $wspd = 'N/D';
-    $gusts = 'N/D';
-    $beaufort = NULL;
-  }
-  else {
-    $beaufort = getBeaufort(avg($wspd, $gusts))['lvl'];
-  }
-
-  $press = $current->pressure;
-  if (is_null($press)) $press = 'N/D';
-
-  $qnh = convertQFEToQNH($press);
+//api retrieval
+$wx = $obj->observations[0];
+$wx_altn = $json_rain['observations'][0];
 
 
+$sw = $wx->softwareType;
+$nome = $wx->neighborhood;
+$obstime = $wx->obsTimeLocal;
 
-  //upcoming
-  $txt = file_get_contents($url1);
-  $json_fcst = json_decode($txt, true);
-
-  //qualita Aria
-  $txt = file_get_contents($url2);
-  $json_q = json_decode($txt, true);
+$data_from_near = false;
+$wm2 = $wx->solarRadiation;
+if (is_null($wm2) || $wm2 == '') {
+  $wm2 = $wx_altn['solarRadiation'];
+  $data_from_near = true;
 }
-catch(Exception $e) {
-  echo 'Errore: ' .$e->getMessage();
+
+$lux = floor(convertWm2toLux($wm2));
+$uv = $wx->uv;
+if (is_null($uv) || $uv == ''){
+  $uv = $wx_altn['uv'];
+  $data_from_near = true;
 }
+$winddir = $wx->winddir;
+if (is_null($winddir)) $winddir = 'N/D';
+$humidity = $wx->humidity;
+if (is_null($humidity)) $humidity = 'N/D';
+
+$current = $wx->metric;
+
+$temp = $current->temp;
+if (is_null($temp)) $temp = 'N/D';
+$hi = $current->heatIndex;
+if (is_null($hi)){
+  $hi = 'N/D';
+  $calore = 'N/D';
+}
+else {
+  $calore = getHeatInfo($hi);
+}
+$dewpoint = $current->dewpt;
+if (is_null($dewpoint)) $dewpoint = 'N/D';
+
+$wspd = $current->windSpeed;
+$gusts = $current->windGust;
+if (is_null($wspd) || is_null($gusts)) {
+  $wspd = 'N/D';
+  $gusts = 'N/D';
+  $beaufort = NULL;
+}
+else {
+  $beaufort = getBeaufort(avg($wspd, $gusts))['lvl'];
+}
+
+$press = $current->pressure;
+if (is_null($press)) $press = 'N/D';
+
+$qnh = convertQFEToQNH($press);
+
+
+
+//upcoming
+$txt = file_get_contents($url1);
+$json_fcst = json_decode($txt, true);
+
+//qualita Aria
+$txt = file_get_contents($url2);
+$json_q = json_decode($txt, true);
 ?>
 
 <html lang="it" dir="ltr">
@@ -128,8 +130,8 @@ catch(Exception $e) {
           </tr>
             <tr>
               <td>Vento<br>
-                Beaufort: <?php echo '<b>'.$beaufort.'</b> <small>('.getBeaufort(avg($wspd, $gusts))['descr'].')</small>'; ?><br>
-                <?php echo 'Lago: <b>'.getBeaufort(avg($wspd, $gusts))['lago'].'</b>'; ?>
+                <?php echo '<b>'.$beaufort.'</b> <small>('.getBeaufort(avg($wspd, $gusts))['descr'].')</small>'; ?><br>
+                <?php echo 'Lago <b>'.getBeaufort(avg($wspd, $gusts))['lago'].'</b>'; ?>
               </td>
               <td>da <?php echo ceil($winddir / 10) * 10; ?>°<br>
                 min. <?php echo $wspd ?> km/h<br>
@@ -156,22 +158,26 @@ catch(Exception $e) {
             </tr>
             <tr>
               <td>Temperatura Equivalente Potenziale</td>
-              <td><?php echo round(TEQ($temp, $dewpoint, $press), 2) ?> °C</td>
+              <td><?php echo round(TEQ($temp, $dewpoint, $press), 2)-237.15 ?> °C<br>
+              (<?php echo round(TEQ($temp, $dewpoint, $press), 2) ?> K)</td>
             </tr>
             <tr>
               <td>Altezza di formazione basi nubi cumuliformi</td>
               <td><?php $hgt = estimateHeightCu($temp, $dewpoint); echo $hgt ?> m (<?php echo $hgt * 3.28 ?> ft)</td>
             </tr>
             <tr>
-              <td>Indice UV</td>
+              <td>Indice UV
+                <?php if ($data_from_near) echo '<small>*</small>' ?></td>
               <td style="background-color: <?php echo getColorUV($uv)['color']; ?>; color: black"><b><?php echo $uv; ?></b><br>
                 <small><?php echo getColorUV($uv)['msg']; ?></small>
               </td>
             </tr>
             <tr>
-              <td>Energia Solare attuale</td>
+              <td>Energia Solare attuale
+                <?php if ($data_from_near) echo '<small>*</small>' ?></td>
               <td><?php echo round($wm2, 2) ?> Wh/mq<br><small>(<?php echo $lux; ?> lux @ spettro 555 nm)</small></td>
             </tr>
+
           </table>
         </div>
 
@@ -201,8 +207,62 @@ catch(Exception $e) {
               <tr>
                 <td>NO<sub>2</sub><br><small>(pericolo >35µg/m<sup>3</sup>)</small></td> <td><?php echo round($no2,2); ?> µg/m<sup>3</sup></td>
               </tr>
-              <tr>
+              <!--<tr>
                 <td>CO<br><small>(pericolo >10ppm)</small></td> <td><?php echo round(($co)/1000); ?> ppm</td>
+              </tr>-->
+              <tr>
+                <td>RADAR Valeggio</td>
+                <td><!-- Button trigger modal -->
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#radarValeggio">
+                    Lettura RADAR
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="radarValeggio" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <img src="http://www.arpa.veneto.it/previsioni/radar_valeggio/PPI_36_Z_2_01.PNG">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>RADAR Teolo</td>
+                <td><!-- Button trigger modal -->
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#radarTeolo">
+                    Lettura RADAR
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="radarTeolo" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <img src="http://www.arpa.veneto.it/bollettini/meteo/radar/imgs/teolo/1_BASE.jpg">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
             </table>
           </div>

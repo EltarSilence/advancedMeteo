@@ -144,7 +144,7 @@
       $arr['color'] = '#f58f0a';
     }
     if ($oz>=240){
-      $arr['msg'] = 'Molta alta';
+      $arr['msg'] = 'Molto alta';
       $arr['color'] = '#ff1e00';
     }
     return $arr;
@@ -152,27 +152,27 @@
 
   function getBeaufort($kmh){
     $arr = [];
-    if ($kmh < 1){
+    if ($kmh < 2){
       $arr['lvl'] = 0;
       $arr['descr'] = 'Calma di vento';
       $arr['lago'] = 'Calmo';
     }
-    if ($kmh >=1 && $kmh < 6){
+    if ($kmh >=2 && $kmh < 7){
       $arr['lvl'] = 1;
       $arr['descr'] = 'Bava di vento';
       $arr['lago'] = 'Quasi calmo';
     }
-    if ($kmh >=6 && $kmh < 11){
+    if ($kmh >=7 && $kmh < 12){
       $arr['lvl'] = 2;
       $arr['descr'] = 'Brezza leggera';
       $arr['lago'] = 'Poco mosso';
     }
-    if ($kmh >=11 && $kmh < 19){
+    if ($kmh >=12 && $kmh < 20){
       $arr['lvl'] = 3;
       $arr['descr'] = 'Brezza tesa';
       $arr['lago'] = 'Mosso';
     }
-    if ($kmh >=19 && $kmh < 29){
+    if ($kmh >=20 && $kmh < 29){
       $arr['lvl'] = 4;
       $arr['descr'] = 'Vento moderato';
       $arr['lago'] = 'Mosso';
