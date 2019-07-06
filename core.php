@@ -129,23 +129,18 @@
     $arr = [];
     if ($oz <= 80){
       $arr['msg'] = 'Molto bassa';
-      $arr['color'] = '#1df2dd';
     }
     if ($oz>80 && $oz<120){
       $arr['msg'] = 'Bassa';
-      $arr['color'] = '#42fc77';
     }
     if ($oz>=120 && $oz<180){
       $arr['msg'] = 'Media';
-      $arr['color'] = '#cccf1b';
     }
     if ($oz>=180 && $oz<240){
       $arr['msg'] = 'Alta';
-      $arr['color'] = '#f58f0a';
     }
     if ($oz>=240){
       $arr['msg'] = 'Molto alta';
-      $arr['color'] = '#ff1e00';
     }
     return $arr;
   }

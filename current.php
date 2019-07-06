@@ -34,8 +34,7 @@ $obstime = $wx->obsTimeLocal;
 $data_from_near = false;
 $wm2 = $wx->solarRadiation;
 if (is_null($wm2) || $wm2 == '') {
-  $wm2 = $wx_altn['solarRadiation'];
-  $data_from_near = true;
+  $wm2 = NULL;
 }
 
 $lux = floor(convertWm2toLux($wm2));
@@ -122,7 +121,7 @@ $json_q = json_decode($txt, true);
           </tr>
           <tr>
             <td>Indice di calore<br><small>(Temperatura percepita)</small></td>
-            <td style="background-color: <?php echo $calore['color'] ?>;">
+            <td style="background-color: <?php echo $calore['color'] ?>; color: black; font-weight: bold;">
               + <?= $hi ?> °C<br>
               <small><?php echo $calore['msg'] ?></small><br>
               <?php echo $humidity?>% di umidit&agrave;
@@ -173,9 +172,16 @@ $json_q = json_decode($txt, true);
               </td>
             </tr>
             <tr>
-              <td>Energia Solare attuale
-                <?php if ($data_from_near) echo '<small>*</small>' ?></td>
-              <td><?php echo round($wm2, 2) ?> Wh/mq<br><small>(<?php echo $lux; ?> lux @ spettro 555 nm)</small></td>
+              <td>Energia Solare attuale</td>
+              <td><?php
+              if (!is_null($wm2)){
+                echo round($wm2, 2).' Wh/mq<br><small>('.$lux.' lux @ spettro 555nm)</small>';
+              }
+              else {
+                echo 'Dati indisponibili';
+              }
+              ?>
+              </td>
             </tr>
 
           </table>
@@ -195,7 +201,7 @@ $json_q = json_decode($txt, true);
               <td class="title" colspan="2">Qualit&agrave; dell'atmosfera</td>
             </tr>
             <tr>
-              <td>O<sub>3</sub> (Ozono)</td><td style="background-color: <?php echo getOzono($o3)['color'] ?>;"><?php echo floor($o3); ?> µg/m<sup>3</sup><br>
+              <td>O<sub>3</sub> (Ozono)</td><td><?php echo floor($o3); ?> µg/m<sup>3</sup><br>
                 <small>(Quantit&agrave; <?php echo getOzono($o3)['msg'] ?>)</small></td>
               </tr>
               <tr>
